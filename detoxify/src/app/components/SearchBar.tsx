@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react';
+import { motion } from "framer-motion";
+import { LampContainer } from "./ui/lamp";
 import { PlaceholdersAndVanishInput } from '@/app/components/ui/placeholders-and-vanish-input';
 
 const SearchBar: React.FC = () => {
@@ -22,6 +23,7 @@ const SearchBar: React.FC = () => {
 
   return (
     <div className="h-[40rem] flex flex-col justify-center items-center px-4">
+      <LampContainer>
       <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black">
       Focus on Your Goals with Detoxify
       </h2>
@@ -30,6 +32,7 @@ const SearchBar: React.FC = () => {
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
+      </LampContainer>
     </div>
   );
 };
