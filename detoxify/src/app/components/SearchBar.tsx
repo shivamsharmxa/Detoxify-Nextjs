@@ -2,6 +2,26 @@
 import { motion } from "framer-motion";
 import { LampContainer } from "./ui/lamp";
 import { PlaceholdersAndVanishInput } from '@/app/components/ui/placeholders-and-vanish-input';
+import { TypewriterEffectSmooth } from "./ui/typewriter-effect";
+
+const words = [
+  {
+    text: "Focus",
+  },
+  {
+    text: "On",
+  },
+  {
+    text: "Goals",
+  },
+  {
+    text: "with",
+  },
+  {
+    text: "Detoxify.",
+    className: "text-blue-500 dark:text-blue-500",
+  },
+];
 
 const SearchBar: React.FC = () => {
   const placeholders = [
@@ -25,7 +45,7 @@ const SearchBar: React.FC = () => {
     <div className="h-[40rem] flex flex-col justify-center items-center px-4">
       <LampContainer>
       <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black">
-      Focus on Your Goals with Detoxify
+       <TypewriterEffectSmooth words={words} />
       </h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
