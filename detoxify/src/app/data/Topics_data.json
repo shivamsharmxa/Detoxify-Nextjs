@@ -1,0 +1,45 @@
+{
+    "courses": [
+      {
+        "id": 1,
+        "title": "React Fundamentals",
+        "slug": "react-fundamentals",
+        "description": "Master the basics of React.js with our comprehensive beginner's course.",
+        "isFeatured": true,
+        "image": "/topics/React.png" 
+      },
+      {
+        "id": 2,
+        "title": "TypeScript Essentials",
+        "slug": "typescript-essentials",
+        "description": "Learn essential TypeScript concepts and syntax for modern web development.",
+        "isFeatured": false,
+        "image": "/topics/typescript.jpg" 
+      },
+      {
+        "id": 3,
+        "title": "C++ Programming",
+        "slug": "cplusplus-programming",
+        "description": "Become proficient in C++ programming language with our in-depth course.",
+        "isFeatured": true,
+        "image": "/topics/c++.jpg" 
+      },
+      {
+        "id": 4,
+        "title": "Rust Programming Masterclass",
+        "slug": "rust-programming-masterclass",
+        "description": "Master Rust programming language with hands-on projects and expert guidance.",
+        "isFeatured": false,
+        "image": "/topics/rust.jpg" 
+      },
+      {
+        "id": 5,
+        "title": "Next.js Complete Guide",
+        "slug": "nextjs-complete-guide",
+        "description": "Explore Next.js framework with server-side rendering and React integration.",
+        "isFeatured": true,
+        "image": "/topics/nextjs.webp"
+      }
+    ]
+  }
+  
