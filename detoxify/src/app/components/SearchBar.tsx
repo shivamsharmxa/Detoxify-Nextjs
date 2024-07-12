@@ -1,4 +1,5 @@
 'use client'
+import { FC } from 'react';
 import { motion } from "framer-motion";
 import { LampContainer } from "./ui/lamp";
 import { PlaceholdersAndVanishInput } from '@/app/components/ui/placeholders-and-vanish-input';
@@ -23,7 +24,11 @@ const words = [
   },
 ];
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  onSearch: (searchQuery: string) => void;
+}
+
+const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
   const placeholders = [
     "How to learn React?",
     "How to be productive?",
@@ -38,9 +43,14 @@ const SearchBar: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submitted");
+    const query = e.currentTarget?.query?.value;
+    if (query) {
+      console.log('Submitted query:', query);
+      onSearch(query);
+    } else {
+      console.error('Query value is undefined or null');
+    }
   };
-
   return (
     <div className="h-[40rem] flex flex-col justify-center items-center px-4">
       <LampContainer>
