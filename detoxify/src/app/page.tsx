@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import SearchBar from "./components/SearchBar";
 import Topics from "./components/Topics"
-import { Video } from '@/app/utils/api';
+import { Video } from '@/app/pages/api/videos';
 
 
 

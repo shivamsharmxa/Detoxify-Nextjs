@@ -1,7 +1,7 @@
 // components/Topics.tsx
 
 import React, { useEffect, useState } from 'react';
-import { Video } from '@/app/utils/api';
+import { Video } from '@/app/pages/api/videos';
 
 const Topics = () => {
   const [videos, setVideos] = useState<Video[]>([]);
