@@ -1,27 +1,12 @@
 // src/pages/api/videos.ts
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import { google, youtube_v3 } from 'googleapis';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { google } from 'googleapis';
 
 const youtube = google.youtube({
   version: 'v3',
-  auth: process.env.YOUTUBE_API_KEY, // Ensure this is set in your environment variables
+  auth: process.env.YOUTUBE_API_KEY, // Use environment variable for API key
 });
-
-export type Video = {
-  id: {
-    videoId: string;
-  };
-  snippet: {
-    title: string;
-    description: string;
-    thumbnails: {
-      high: {
-        url: string;
-      };
-    };
-  };
-};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { query } = req.query;
@@ -39,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       maxResults: 9,
     });
 
-    const items: Video[] = response.data.items?.map(item => ({
+    const items = response.data.items?.map(item => ({
       id: {
         videoId: item.id?.videoId ?? '',
       },

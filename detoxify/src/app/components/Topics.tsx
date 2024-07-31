@@ -1,19 +1,34 @@
 // components/Topics.tsx
 
+// src/components/Topics.tsx
 import React, { useEffect, useState } from 'react';
-import { Video } from '@/app/pages/api/videos';
+
+interface Video {
+  id: {
+    videoId: string;
+  };
+  snippet: {
+    title: string;
+    description: string;
+    thumbnails: {
+      high: {
+        url: string;
+      };
+    };
+  };
+}
 
 const Topics = () => {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [query, setQuery] = useState<string>('default topic');
 
   useEffect(() => {
-    // Fetch initial default topics or handle as needed
-    fetchVideos('default topic');
-  }, []);
+    fetchVideos(query);
+  }, [query]);
 
   const fetchVideos = async (query: string) => {
     try {
-      const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }

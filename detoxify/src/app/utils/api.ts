@@ -4,7 +4,7 @@ import { google, youtube_v3 } from 'googleapis';
 
 const youtube = google.youtube({
   version: 'v3',
-  auth: "AIzaSyAy623zXdc3y7NEYEESCw9JDuSQ0uMLHSM", // Replace with your YouTube API key
+  auth: process.env.YOUTUBE_API_KEY, // Replace with your YouTube API key
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
