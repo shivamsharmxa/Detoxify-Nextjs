@@ -12,6 +12,8 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async (query: string) => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}`); // Adjust if needed
       if (!response.ok) {
@@ -20,15 +22,24 @@ export default function Home() {
       const data = await response.json();
       console.log('Search results:', data); // Log data to verify
       setSearchResults(data);
+      setSearchQuery(query);  // Update the search query state
     } catch (error) {
       console.error('Error searching:', error);
+      setError('Failed to fetch data');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <SearchBar onSearch={handleSearch} />
-      <Topics searchQuery={searchQuery} />
+      <Topics 
+        searchQuery={searchQuery} 
+        searchResults={searchResults}
+        loading={loading}
+        error={error}
+      />
     </>
   );
 }

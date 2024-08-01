@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import { FC, useState } from 'react';
 import { LampContainer } from './ui/lamp';
 import { PlaceholdersAndVanishInput } from '@/app/components/ui/placeholders-and-vanish-input';

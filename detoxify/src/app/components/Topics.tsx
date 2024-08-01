@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface Video {
   id: {
@@ -17,44 +18,34 @@ interface Video {
 
 interface TopicsProps {
   searchQuery: string;
+  searchResults: Video[];
+  loading: boolean;
+  error: string | null;
 }
 
-const Topics: React.FC<TopicsProps> = ({ searchQuery }) => {
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+const Topics: React.FC<TopicsProps> = ({ searchQuery, searchResults, loading, error }) => {
+  const [defaultVideos, setDefaultVideos] = useState<Video[]>([]);
 
   useEffect(() => {
-    if (searchQuery) {
-      fetchVideos(searchQuery);
+    // Fetch default videos only if there are no search results
+    if (!searchQuery) {
+      const fetchDefaultVideos = async () => {
+        try {
+          const response = await fetch(`/api/videos?query=default`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch default videos');
+          }
+          const data = await response.json();
+          setDefaultVideos(data);
+        } catch (error) {
+          console.error('Error fetching default videos:', error);
+        }
+      };
+      fetchDefaultVideos();
     }
   }, [searchQuery]);
 
-  const fetchVideos = async (query: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
-      }
-      const data = await response.json();
-      console.log('API response:', data); // Verify the response structure
-
-      // Ensure data is in the correct format
-      if (Array.isArray(data)) {
-        setVideos(data);
-      } else {
-        console.error('Unexpected data format:', data);
-        setError('Unexpected data format');
-      }
-    } catch (error: any) {
-      console.error('Error fetching videos:', error);
-      setError('Failed to fetch data');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const videosToShow = searchResults.length > 0 ? searchResults : defaultVideos;
 
   return (
     <div className="py-12 bg-gray-900">
@@ -66,17 +57,19 @@ const Topics: React.FC<TopicsProps> = ({ searchQuery }) => {
       <div className="mx-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
         {loading && <p className="text-white text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">Error: {error}</p>}
-        {!loading && !error && videos.length === 0 && (
+        {!loading && !error && videosToShow.length === 0 && (
           <p className="text-white text-center">No results found</p>
         )}
-        {videos.map((video) => (
+        {videosToShow.map((video) => (
           <div key={video.id.videoId} className="flex justify-center">
             <div className="bg-white dark:bg-zinc-900 rounded-lg overflow-hidden shadow-lg">
               <div className="relative w-full h-60">
-                <img
+                <Image
                   src={video.snippet.thumbnails.high.url}
                   alt={video.snippet.title}
-                  className="rounded-t-lg object-cover w-full h-full"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
                 />
               </div>
               <div className="p-6 flex flex-col items-center text-center">
@@ -104,7 +97,7 @@ const Topics: React.FC<TopicsProps> = ({ searchQuery }) => {
           href="/courses"
           className="px-4 py-2 rounded-lg border border-neutral-600 text-neutral-700 bg-white hover:bg-gray-100 transition duration-200"
         >
-          View All Courses
+          View More Topics
         </a>
       </div>
     </div>
