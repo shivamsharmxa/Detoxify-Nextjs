@@ -1,51 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-
-interface Video {
-  id: {
-    videoId: string;
-  };
-  snippet: {
-    title: string;
-    description: string;
-    thumbnails: {
-      high: {
-        url: string;
-      };
-    };
-  };
-}
+import React, { useState, useEffect } from 'react';
+import { Video } from '@/app/types';  // Ensure this type is defined properly in your project
 
 interface TopicsProps {
   searchQuery: string;
   searchResults: Video[];
+  defaultTopics: Video[];
+  onLoadMore: (query: string, pageToken?: string) => void;
   loading: boolean;
   error: string | null;
+  nextPageToken: string | null;
 }
 
-const Topics: React.FC<TopicsProps> = ({ searchQuery, searchResults, loading, error }) => {
-  const [defaultVideos, setDefaultVideos] = useState<Video[]>([]);
+const Topics: React.FC<TopicsProps> = ({
+  searchQuery,
+  searchResults,
+  defaultTopics,
+  onLoadMore,
+  loading,
+  error,
+  nextPageToken,
+}) => {
+  const [videos, setVideos] = useState<Video[]>(defaultTopics);
 
   useEffect(() => {
-    // Fetch default videos only if there are no search results
-    if (!searchQuery) {
-      const fetchDefaultVideos = async () => {
-        try {
-          const response = await fetch(`/api/videos?query=default`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch default videos');
-          }
-          const data = await response.json();
-          setDefaultVideos(data);
-        } catch (error) {
-          console.error('Error fetching default videos:', error);
-        }
-      };
-      fetchDefaultVideos();
-    }
-  }, [searchQuery]);
+    setVideos(searchQuery ? searchResults : defaultTopics);
+  }, [searchQuery, searchResults, defaultTopics]);
 
-  const videosToShow = searchResults.length > 0 ? searchResults : defaultVideos;
+  const handleLoadMore = () => {
+    onLoadMore(searchQuery, nextPageToken || undefined);
+  };
 
   return (
     <div className="py-12 bg-gray-900">
@@ -57,19 +40,17 @@ const Topics: React.FC<TopicsProps> = ({ searchQuery, searchResults, loading, er
       <div className="mx-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
         {loading && <p className="text-white text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">Error: {error}</p>}
-        {!loading && !error && videosToShow.length === 0 && (
+        {!loading && !error && (!videos || videos.length === 0) && (
           <p className="text-white text-center">No results found</p>
         )}
-        {videosToShow.map((video) => (
-          <div key={video.id.videoId} className="flex justify-center">
+        {videos && videos.map((video, index) => (
+          <div key={`${video.id.videoId}-${index}`} className="flex justify-center">
             <div className="bg-white dark:bg-zinc-900 rounded-lg overflow-hidden shadow-lg">
               <div className="relative w-full h-60">
-                <Image
+                <img
                   src={video.snippet.thumbnails.high.url}
                   alt={video.snippet.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
+                  className="rounded-t-lg object-cover w-full h-full"
                 />
               </div>
               <div className="p-6 flex flex-col items-center text-center">
@@ -93,15 +74,17 @@ const Topics: React.FC<TopicsProps> = ({ searchQuery, searchResults, loading, er
         ))}
       </div>
       <div className="mt-20 text-center">
-        <a
-          href="/courses"
+        <button
+          onClick={handleLoadMore}
           className="px-4 py-2 rounded-lg border border-neutral-600 text-neutral-700 bg-white hover:bg-gray-100 transition duration-200"
         >
           View More Topics
-        </a>
+        </button>
       </div>
     </div>
   );
 };
 
 export default Topics;
+
+

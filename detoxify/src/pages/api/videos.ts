@@ -1,47 +1,23 @@
-// src/pages/api/videos.ts
-
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { google } from 'googleapis';
 
-const youtube = google.youtube({
-  version: 'v3',
-  auth: process.env.YOUTUBE_API_KEY, // Use environment variable for API key
-});
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { query, pageToken } = req.query;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { query } = req.query;
-
-  if (!query || typeof query !== 'string') {
-    res.status(400).json({ error: 'Query parameter is required' });
-    return;
-  }
+  const youtubeApiKey = process.env.YOUTUBE_API_KEY;
+  const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=${youtubeApiKey}&pageToken=${pageToken || ''}`;
 
   try {
-    const response = await youtube.search.list({
-      part: ['snippet'],
-      q: query,
-      type: ['video'],
-      maxResults: 9,
-    });
+    const response = await fetch(searchUrl);
+    const data = await response.json();
 
-    const items = response.data.items?.map(item => ({
-      id: {
-        videoId: item.id?.videoId ?? '',
-      },
-      snippet: {
-        title: item.snippet?.title ?? '',
-        description: item.snippet?.description ?? '',
-        thumbnails: {
-          high: {
-            url: item.snippet?.thumbnails?.high?.url ?? '',
-          },
-        },
-      },
-    })) ?? [];
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message });
+    }
 
-    res.status(200).json(items);
+    res.status(200).json(data);
   } catch (error) {
-    console.error('Failed to fetch data from YouTube API:', error);
-    res.status(500).json({ error: 'Failed to fetch data from YouTube API' });
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
-}
+};
+
+export default handler;
