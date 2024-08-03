@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Video } from '@/app/types';  // Ensure this type is defined properly in your project
+import { Video } from '@/app/types';  
 
 interface TopicsProps {
   searchQuery: string;
   searchResults: Video[];
   defaultTopics: Video[];
-  onLoadMore: (query: string, pageToken?: string) => void;
+  onLoadMore: () => void;
   loading: boolean;
   error: string | null;
   nextPageToken: string | null;
@@ -25,10 +25,6 @@ const Topics: React.FC<TopicsProps> = ({
   useEffect(() => {
     setVideos(searchQuery ? searchResults : defaultTopics);
   }, [searchQuery, searchResults, defaultTopics]);
-
-  const handleLoadMore = () => {
-    onLoadMore(searchQuery, nextPageToken || undefined);
-  };
 
   return (
     <div className="py-12 bg-gray-900">
@@ -75,10 +71,10 @@ const Topics: React.FC<TopicsProps> = ({
       </div>
       <div className="mt-20 text-center">
         <button
-          onClick={handleLoadMore}
+          onClick={onLoadMore}
           className="px-4 py-2 rounded-lg border border-neutral-600 text-neutral-700 bg-white hover:bg-gray-100 transition duration-200"
         >
-          View More Topics
+          View More Videos
         </button>
       </div>
     </div>
@@ -86,5 +82,3 @@ const Topics: React.FC<TopicsProps> = ({
 };
 
 export default Topics;
-
-

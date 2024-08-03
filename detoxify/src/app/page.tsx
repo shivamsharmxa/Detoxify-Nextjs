@@ -56,16 +56,21 @@ export default function Home() {
     }
   };
 
-  const handleLoadMore = async (query: string, pageToken?: string) => {
+  const handleLoadMore = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}&pageToken=${pageToken || ''}`);
+      const query = searchQuery || 'study';
+      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}&pageToken=${nextPageToken || ''}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
-      setSearchResults((prevResults) => [...prevResults, ...data.items]);
+      if (searchQuery) {
+        setSearchResults((prevResults) => [...prevResults, ...data.items]);
+      } else {
+        setDefaultTopics((prevTopics) => [...prevTopics, ...data.items]);
+      }
       setNextPageToken(data.nextPageToken || null);
     } catch (error: any) {
       console.error('Error loading more:', error);
