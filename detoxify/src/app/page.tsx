@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import Topics from './components/Topics';
-import { Video } from '@/app/types';  // Ensure this type is defined properly in your project
+import { Video } from '@/app/types';
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<Video[]>([]);
   const [defaultTopics, setDefaultTopics] = useState<Video[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');  // Maintain search query state
+  const [searchQuery, setSearchQuery] = useState<string>(''); 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
@@ -56,21 +56,16 @@ export default function Home() {
     }
   };
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = async (query: string, pageToken?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const query = searchQuery || 'study';
-      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}&pageToken=${nextPageToken || ''}`);
+      const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}&pageToken=${pageToken || ''}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
-      if (searchQuery) {
-        setSearchResults((prevResults) => [...prevResults, ...data.items]);
-      } else {
-        setDefaultTopics((prevTopics) => [...prevTopics, ...data.items]);
-      }
+      setSearchResults((prevResults) => [...prevResults, ...data.items]);
       setNextPageToken(data.nextPageToken || null);
     } catch (error: any) {
       console.error('Error loading more:', error);

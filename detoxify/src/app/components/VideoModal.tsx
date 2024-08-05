@@ -1,30 +1,22 @@
+'use client';
+
 import React from 'react';
-import { Video } from '@/app/types';  // Ensure this type is defined properly in your project
+import ReactPlayer from 'react-player/youtube';
 
 interface VideoModalProps {
-  video: Video;
+  videoId: string | null;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
+const VideoModal: React.FC<VideoModalProps> = ({ videoId, isOpen, onClose }) => {
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-      <div className="bg-white rounded-lg overflow-hidden shadow-lg max-w-2xl w-full">
-        <div className="relative pb-9/16">
-          <iframe
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${video.id.videoId}`}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title={video.snippet.title}
-          ></iframe>
-        </div>
-        <div className="p-4 text-right">
-          <button onClick={onClose} className="text-red-500 hover:text-red-700">
-            Close
-          </button>
-        </div>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg p-4 w-full max-w-3xl">
+        <button className="float-right" onClick={onClose}>Close</button>
+        {videoId && <ReactPlayer url={`https://www.youtube.com/watch?v=${videoId}`} playing controls width="100%" />}
       </div>
     </div>
   );
