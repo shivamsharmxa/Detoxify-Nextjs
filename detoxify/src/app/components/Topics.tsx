@@ -32,7 +32,11 @@ const Topics: React.FC<TopicsProps> = ({
   }, [searchQuery, searchResults, defaultTopics]);
 
   const handleLoadMore = () => {
-    onLoadMore(searchQuery, nextPageToken || undefined);
+    if (searchQuery) {
+      onLoadMore(searchQuery, nextPageToken || undefined);
+    } else {
+      onLoadMore('study', nextPageToken || undefined);
+    }
   };
 
   const openModal = (videoId: string) => {
@@ -48,7 +52,7 @@ const Topics: React.FC<TopicsProps> = ({
   return (
     <div className="py-12 bg-gray-900">
       <div className="text-center mb-8">
-        <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">
+        <p className="mt-10 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">
           Be Productive
         </p>
       </div>

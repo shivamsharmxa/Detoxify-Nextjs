@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import Topics from './components/Topics';
-import { Video } from '@/app/types';
+import { Video } from '@/app/types';  // Ensure this type is defined properly in your project
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<Video[]>([]);
   const [defaultTopics, setDefaultTopics] = useState<Video[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>(''); 
+  const [searchQuery, setSearchQuery] = useState<string>('');  // Maintain search query state
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
@@ -65,7 +65,13 @@ export default function Home() {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
-      setSearchResults((prevResults) => [...prevResults, ...data.items]);
+
+      if (query === 'study') {
+        setDefaultTopics((prevTopics) => [...prevTopics, ...data.items]);
+      } else {
+        setSearchResults((prevResults) => [...prevResults, ...data.items]);
+      }
+
       setNextPageToken(data.nextPageToken || null);
     } catch (error: any) {
       console.error('Error loading more:', error);
