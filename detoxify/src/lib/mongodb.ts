@@ -1,23 +1,18 @@
 import mongoose from 'mongoose';
-import { connected } from 'process';
 
 const MONGODB_URI: string = process.env.MONGODB_URI!;
 
-export async function connect(){
-  try{
-    mongoose.connect(MONGODB_URI)
-    const connection = mongoose.connection
+export async function connect() {
+  if (mongoose.connection.readyState >= 1) {
+    console.log('MongoDB is already connected');
+    return;
+  }
 
-    connection.on('connected', () => {
-      console.log('MongoDB connected')
-    })
-    connection.on('error', (err) => {
-      console.log('MongoDB connection error, Please make sure db is up and running' + err);
-      process.exit()
-
-    })
-  } catch (error){
-    console.log("Something went wrong in connecting to DB");
-    console.log(error);
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    // Gracefully handle the error, e.g., retry connection or notify
   }
 }
