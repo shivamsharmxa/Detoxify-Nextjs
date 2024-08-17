@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Video } from '@/app/types';  
+import { Video } from '../types';  
 import VideoModal from './VideoModal';
 
 interface TopicsProps {

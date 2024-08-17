@@ -2,7 +2,7 @@
 
 import { FC, useState } from 'react';
 import { LampContainer } from './ui/lamp';
-import { PlaceholdersAndVanishInput } from '@/app/components/ui/placeholders-and-vanish-input';
+import { PlaceholdersAndVanishInput } from '../components/ui/placeholders-and-vanish-input';
 import { TypewriterEffectSmooth } from './ui/typewriter-effect';
 
 const words = [
