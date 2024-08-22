@@ -4,6 +4,8 @@ import { FC, useState } from 'react';
 import { LampContainer } from './ui/lamp';
 import { PlaceholdersAndVanishInput } from '../components/ui/placeholders-and-vanish-input';
 import { TypewriterEffectSmooth } from './ui/typewriter-effect';
+import { Sidebar } from './ui/sidebar';
+import { SidebarOnly } from './SideBar';
 
 const words = [
   { text: 'Focus' },
@@ -43,6 +45,8 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
+    <>
+    
     <div className="h-[40rem] flex flex-col justify-center items-center px-4">
       <LampContainer>
         <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black">
@@ -56,6 +60,9 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
         />
       </LampContainer>
     </div>
+   
+   
+    </>
   );
 };
 

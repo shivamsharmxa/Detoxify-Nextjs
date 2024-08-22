@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast'; // `toast` instead of `Toast`
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Vortex } from 'src/app/components/ui/vortex';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -42,8 +43,13 @@ export default function SignUpPage() {
   }, [user]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 shadow-lg rounded-lg">
+    
+    <div className="w-full h-screen flex justify-center items-center bg-black">
+      <Vortex
+        backgroundColor="black"
+        className="flex flex-col justify-center items-center px-4 py-4 h-full">
+
+      <div className="w-full max-w-md p-8 space-y-8 bg-gray-1000 shadow-lg rounded-lg">
         <h2 className="text-3xl font-bold text-center text-white">Sign Up</h2>
         <form onSubmit={onSignup} className="space-y-6">
           <div>
@@ -104,6 +110,7 @@ export default function SignUpPage() {
           Already have an account? <Link href="/auth/login" className="text-indigo-500">Login</Link>
         </div>
       </div>
+      </Vortex>
     </div>
   );
 }

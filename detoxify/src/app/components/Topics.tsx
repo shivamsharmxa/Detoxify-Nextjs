@@ -27,8 +27,13 @@ const Topics: React.FC<TopicsProps> = ({
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Update videos when searchQuery or searchResults change
   useEffect(() => {
-    setVideos(searchQuery ? searchResults : defaultTopics);
+    if (searchQuery) {
+      setVideos(searchResults);
+    } else {
+      setVideos(defaultTopics);
+    }
   }, [searchQuery, searchResults, defaultTopics]);
 
   const handleLoadMore = () => {
