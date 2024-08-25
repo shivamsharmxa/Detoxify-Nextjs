@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Video } from '../types';  
 import VideoModal from './VideoModal';
+import { CardContainer, CardBody, CardItem } from './ui/3d-card';
 
 interface TopicsProps {
   searchQuery: string;
@@ -27,7 +28,6 @@ const Topics: React.FC<TopicsProps> = ({
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Update videos when searchQuery or searchResults change
   useEffect(() => {
     if (searchQuery) {
       setVideos(searchResults);
@@ -68,31 +68,35 @@ const Topics: React.FC<TopicsProps> = ({
           <p className="text-white text-center">No results found</p>
         )}
         {videos && videos.map((video, index) => (
-          <div key={`${video.id.videoId}-${index}`} className="flex justify-center">
-            <div className="bg-white dark:bg-zinc-900 rounded-lg overflow-hidden shadow-lg">
-              <div className="relative w-full h-60">
-                <img
-                  src={video.snippet.thumbnails.high.url}
-                  alt={video.snippet.title}
-                  className="rounded-t-lg object-cover w-full h-full"
-                />
-              </div>
-              <div className="p-6 flex flex-col items-center text-center">
-                <h3 className="text-lg sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">
-                  {video.snippet.title}
-                </h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-                  {video.snippet.description}
-                </p>
-                <button
-                  onClick={() => openModal(video.id.videoId)}
-                  className="mt-4 px-4 py-2 rounded-lg text-xs font-normal text-white bg-teal-600 hover:bg-teal-700 transition duration-200"
-                >
-                  Watch Video →
-                </button>
-              </div>
-            </div>
-          </div>
+          <CardContainer key={`${video.id.videoId}-${index}`} containerClassName="flex justify-center">
+            <CardBody>
+              <CardItem>
+                <div className="bg-white dark:bg-zinc-900 rounded-lg overflow-hidden shadow-lg">
+                  <div className="relative w-full h-60">
+                    <img
+                      src={video.snippet.thumbnails.high.url}
+                      alt={video.snippet.title}
+                      className="rounded-t-lg object-cover w-full h-full"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col items-center text-center">
+                    <h3 className="text-lg sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">
+                      {video.snippet.title}
+                    </h3>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                      {video.snippet.description}
+                    </p>
+                    <button
+                      onClick={() => openModal(video.id.videoId)}
+                      className="mt-4 px-4 py-2 rounded-lg text-xs font-normal text-white bg-teal-600 hover:bg-teal-700 transition duration-200"
+                    >
+                      Watch Video →
+                    </button>
+                  </div>
+                </div>
+              </CardItem>
+            </CardBody>
+          </CardContainer>
         ))}
       </div>
       <div className="mt-20 text-center">
