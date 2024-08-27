@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { TypewriterEffectSmooth } from 'src/app/components/ui/typewriter-effect';
 import { Vortex } from "../../components/ui/vortex"; // Ensure the correct import path
+import WhyChooseUS from 'src/app/components/WhyUseUs';
 
 const words = [
   { text: 'Start', className: 'text-white' },
@@ -15,6 +16,7 @@ const words = [
 
 const Dashboard = () => {
   return (
+    <>
     <div className="w-full h-screen flex justify-center items-center bg-black">
       <Vortex
         backgroundColor="black"
@@ -62,7 +64,10 @@ const Dashboard = () => {
           </Link>
         </div>
       </Vortex>
+      
     </div>
+    <WhyChooseUS/>
+    </>
   );
 };
 

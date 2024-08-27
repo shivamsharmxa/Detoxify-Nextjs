@@ -1,52 +1,51 @@
-import {connect} from '../../../../lib/mongodb'
+import { connect } from '../../../../lib/mongodb'
 import User from '../../../../models/User'
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs';
-import jwt from "jsonwebtoken";
-
+import jwt from 'jsonwebtoken';
 
 connect()
 
-export async function POST(request:NextResponse) {
+export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json()
-        const {email, password} = reqBody
-        //validation
+        const { email, password } = reqBody
+        // Validation
         console.log(reqBody);
 
-        const user = await User.findOne({email})
+        const user = await User.findOne({ email })
 
-        if(!user){
-            return NextResponse.json({error: "User does not exists"}, {status: 400})
-
+        if (!user) {
+            return NextResponse.json({ error: "User does not exist" }, { status: 400 })
         }
-         console.log("User exists")
 
-         const validPassword = await bcryptjs.compare(password, user.password)
+        console.log("User exists")
 
-         if(!validPassword){
-            return NextResponse.json({error: "Check your credentials"}, {status: 400})
+        const validPassword = await bcryptjs.compare(password, user.password)
 
-         }
-         const tokenData = {
+        if (!validPassword) {
+            return NextResponse.json({ error: "Check your credentials" }, { status: 400 })
+        }
+
+        const tokenData = {
             id: user._id,
             username: user.username,
             email: user.email
-         }
-         const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1d'})
+        }
+        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' })
 
-         const response = NextResponse.json({
+        const response = NextResponse.json({
             message: "Logged In Success",
             success: true
-         })
-         response.cookies.set("token",token,{
+        })
+        response.cookies.set("token", token, {
             httpOnly: true
-         })
-         return response
-        
-    } catch (error:any) {
-        return NextResponse.json({error: error.message},
-            {status: 500}
+        })
+        return response
+
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message },
+            { status: 500 }
         )
     }
 }
