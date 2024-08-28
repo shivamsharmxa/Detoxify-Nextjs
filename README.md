@@ -33,7 +33,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/yourusername/detoxify.git
+git clone https://github.com/shivamsharmxa/Detoxify-Nextjs
 Navigate to the project directory:
 
 bash
